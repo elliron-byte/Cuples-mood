@@ -1,10 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { GeneratedNamesResponse } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const generateCoupleNames = async (name1: string, name2: string): Promise<string[]> => {
   try {
+    // Initialize the client inside the function to prevent app crashes on load
+    // if the environment variable is missing or the SDK fails to init immediately.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `Combine the names "${name1}" and "${name2}" to create a list of 12 catchy, cute, funny, or romantic couple portmanteau names (like 'Brangelina' or 'Bennifer'). Be creative with phonetics.`,
